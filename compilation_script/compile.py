@@ -135,6 +135,7 @@ def create_resource_item(
 def create_paper_item(
     name: str,
     url: str,
+    open_source: str,
     abstract: str,
     venue: str,
     date: str,
@@ -144,6 +145,7 @@ def create_paper_item(
     Args:
         name (str): Name
         url (str): URL
+        open_source (str): Open Source project
         abstract (str): Abstract
         venue (str): Venue
         date (str): Publication Date
@@ -156,8 +158,13 @@ def create_paper_item(
     else:
         title = name
 
+    if open_source is not None:
+        open_source_link = f"[Repository]({open_source})"
+    else:
+        open_source_link = "Not found"
+
     return f"""\
-| **{title}** | <details> <summary>Click to see the abstract!</summary> {abstract} </details> | {venue} | {date} |
+| **{title}** | {open_source_link} | <details> <summary>Click to see the abstract!</summary> {abstract} </details> | {venue} | {date} |
 """
 
 def read_sorted_resources_as_df() -> pandas.DataFrame:
@@ -226,8 +233,9 @@ def main() -> None:
         abstract = row["Abstract"]
         venue = row["Venue"]
         date = row["Publication Date"]
+        open_source = row["Open Source"]
         papers.append(
-            create_paper_item(name, url, abstract, venue, date))
+            create_paper_item(name, url, open_source, abstract, venue, date))
 
     for _, row in resources_df.iterrows():
         # Keep track of types
