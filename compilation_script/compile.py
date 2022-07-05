@@ -233,7 +233,7 @@ def main() -> None:
         abstract = row["Abstract"]
         venue = row["Venue"]
         date = row["Publication Date"]
-        open_source = row["Open Source"]
+        open_source = row["Open Source"] if not pandas.isna(row["Open Source"]) else None
         papers.append(
             create_paper_item(name, url, open_source, abstract, venue, date))
 
